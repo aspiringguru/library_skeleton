@@ -1,8 +1,22 @@
 var Genre = require('../models/genre');
+var Book = require('../models/book');
+var async = require('async');
+
 
 // Display list of all Genre.
-exports.genre_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Genre list');
+exports.genre_list = function(req, res, next) {
+	console.log("genreController.genre_list : start");
+	//res.send('NOT IMPLEMENTED: Genre list');
+	Genre.find()
+	.sort([['name', 'ascending']])
+	.exec(function (err, list_genres) {
+	  if (err) { 
+		  console.log("genreController.genre_list : err:"+err);
+		  return next(err); 
+	  }
+	// Successful, so render.
+	res.render('genre_list', { title: 'Genre List', list_genres:  list_genres});
+	});
 };
 
 // Display detail page for a specific Genre.
